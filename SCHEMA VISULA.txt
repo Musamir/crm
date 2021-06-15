@@ -51,15 +51,12 @@
 <part>id</part>
 </key>
 </table>
-<table x="234" y="486" name="USERS_INFO">
+<table x="230" y="18" name="USERS_INFO">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="USERS" row="id" />
 </row>
 <row name="FULLNAME" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="AGE" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="SEX" null="1" autoincrement="0">
@@ -73,7 +70,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="997" y="74" name="PRODUCTS">
+<table x="1058" y="251" name="PRODUCTS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -82,8 +79,7 @@
 <default>NULL</default></row>
 <row name="TYPE" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default><relation table="PRODUCT_TYPE" row="id" />
-</row>
+<default>NULL</default></row>
 <row name="DESCRIPTION" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -91,7 +87,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="13" y="550" name="SEX">
+<table x="433" y="62" name="SEX">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -102,57 +98,40 @@
 <part>id</part>
 </key>
 </table>
-<table x="232" y="61" name="BUSINESS_OWNERS">
+<table x="197" y="503" name="BUSINESS_OWNERS">
 <row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="TYPE" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="BUSINESS OWNERS TYPE" row="id" />
+</row>
+<row name="USER_ID" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="USERS" row="id" />
 </row>
-<row name="FINANCE" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="234" y="282" name="BUSINESS">
+<table x="420" y="373" name="BUSINESS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="NAME" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="CURRENT_OWNER" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="USERS" row="id" />
-</row>
 <row name="DESCRIPTION" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="START_DATE" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="BALANCE" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="CAPITAL" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="1240" y="137" name="PRODUCT_TYPE">
-<row name="id" null="1" autoincrement="1">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="NAME" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<key type="PRIMARY" name="">
-<part>id</part>
-</key>
-</table>
-<table x="735" y="52" name="BATCH OF PRODUCTS">
+<table x="1297" y="379" name="BATCH OF PRODUCTS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -179,11 +158,19 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="BATCH STATUS" row="id" />
 </row>
+<row name="SALE_CURRENCY" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CURRENCY" row="id" />
+</row>
+<row name="COST_CURRENCY" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CURRENCY" row="id" />
+</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="998" y="211" name="BATCH STATUS">
+<table x="1584" y="533" name="BATCH STATUS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -194,7 +181,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1240" y="29" name="PROVIDER">
+<table x="858" y="161" name="PROVIDER">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -210,7 +197,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="1456" y="10" name="PROVIDERS_PRICE">
+<table x="605" y="139" name="PROVIDERS_PRICE">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -224,11 +211,15 @@
 <row name="PRICE" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="CURRENCY" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CURRENCY" row="id" />
+</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="1460" y="145" name="PROVIDER_CONTACTS">
+<table x="1053" y="91" name="PROVIDER_CONTACTS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -248,7 +239,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="462" y="151" name="TRANSACTIONS">
+<table x="614" y="299" name="TRANSACTIONS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -273,11 +264,18 @@
 <row name="LAST UPDATE" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="PRICE" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="CURRENCY" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CURRENCY" row="id" />
+</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="735" y="276" name="CONSUMER">
+<table x="1006" y="538" name="CONSUMER">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -290,6 +288,9 @@
 <row name="ADDRESS" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="ADDRESS_ON_MAP" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <row name="CONTACTS" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -300,7 +301,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="737" y="455" name="TRANSACTION STATUS">
+<table x="974" y="744" name="TRANSACTION STATUS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -311,11 +312,10 @@
 <part>id</part>
 </key>
 </table>
-<table x="233" y="149" name="DELIVERIES">
+<table x="229" y="167" name="DELIVERIES">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
-<default>NULL</default><relation table="TRANSACTIONS" row="id" />
-</row>
+<default>NULL</default></row>
 <row name="ADDRESS" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -326,6 +326,134 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="USERS" row="id" />
 </row>
+<row name="TRANSACTION" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="TRANSACTIONS" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="225" y="350" name="OWNER_LIST">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BUSINESS" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="BUSINESS" row="id" />
+</row>
+<row name="USER" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="USERS" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="1763" y="323" name="SECTIONS">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NAME" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="1557" y="302" name="SUBSECTIONS">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="SECTION_ID" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="SECTIONS" row="id" />
+</row>
+<row name="NAME" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="1295" y="257" name="PRODUCT_BELOGING">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="PRODUCT_ID" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="PRODUCTS" row="id" />
+</row>
+<row name="SUBSECTIONS_ID" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="SUBSECTIONS" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="1009" y="442" name="CURRENCY">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NAME" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="595" y="704" name="ACCOUNTS">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BUSINESS_OWNER_ID" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="BUSINESS_OWNERS" row="id" />
+</row>
+<row name="BALANCE" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="CURRENCY" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CURRENCY" row="id" />
+</row>
+<row name="LAST_UPDATE" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="570" y="870" name="BUSINESS OWNERS TYPE">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="NAME" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="594" y="549" name="BUSINESS ACCOUNTS">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="BUSINESS_ID" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="BUSINESS" row="id" />
+</row>
+<row name="BALANCE" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="CURRENCY" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="CURRENCY" row="id" />
+</row>
+<row name="LAST_UPDATE" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
