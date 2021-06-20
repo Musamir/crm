@@ -35,12 +35,13 @@ func NewJWT(signingKey string, expireDuration int64) (*JWT, error) {
 
 // NewJWT ...
 func (t *JWT) NewJWT(Id int) (*string, error) {
+	fmt.Println("JWT expire duration ==>", (time.Duration(t.expireDuration) * time.Minute).Minutes())
 	fmt.Println("(t *JWT) NewJWT(Id int) start ")
 	defer fmt.Println("(t *JWT) NewJWT(Id int) end ")
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, AuthClaims{
 		ID: Id,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Duration(time.Minute * 5)).Unix(),
+			ExpiresAt: time.Now().Add(time.Duration(time.Minute * time.Duration(t.expireDuration))).Unix(),
 		},
 	}).SignedString(t.signingKey)
 	fmt.Println("err new jwt token =>", err)
@@ -57,9 +58,9 @@ func (a *JWT) ParseToken(accessToken *string) (int, error) {
 		}
 		return a.signingKey, nil
 	})
-	fmt.Println("err parsing token =>", err)
+
 	if err != nil {
-		return 0, err
+		fmt.Println("err parsing token =>", err)
 	}
 
 	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {

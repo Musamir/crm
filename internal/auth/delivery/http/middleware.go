@@ -58,11 +58,9 @@ func (m *AuthMiddleware) CheckToken(c *gin.Context) {
 	fmt.Println("header =>", headerParts)
 	id, err := m.usecase.ParseToken(&headerParts[1])
 	if err != nil {
-		fmt.Println("err1 =>", err)
-		status := http.StatusInternalServerError
-		if err == ErrInvalidAccessToken {
-			status = http.StatusUnauthorized
-		}
+		fmt.Println("id ===", id)
+
+		status := http.StatusUnauthorized
 
 		c.AbortWithStatus(status)
 		return

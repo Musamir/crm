@@ -72,7 +72,7 @@ func (user *UserRepository) GetUserInfo(id int) (*models.UsersInfo, error) {
 
 	err := user.db.conn.QueryRow(
 		context.Background(),
-		"SELECT USERS_INFO.ID, USERS.LOGIN, FULLNAME, SEX.NAME, to_char(DATE_OF_BIRTH, 'YYYY.DD.MM'), PROFILE_PHOTO FROM USERS_INFO, USERS, SEX WHERE USERS.ID = $1 AND USERS_INFO.ID = USERS.ID AND SEX.ID = SEX  ORDER BY FULLNAME",
+		"SELECT USERS_INFO.ID, USERS.LOGIN, FULLNAME, SEX.NAME, to_char(DATE_OF_BIRTH, 'YYYY.DD.MM'), COALESCE(PROFILE_PHOTO, '') FROM USERS_INFO, USERS, SEX WHERE USERS.ID = $1 AND USERS_INFO.ID = USERS.ID AND SEX.ID = SEX  ORDER BY FULLNAME",
 		id).Scan(&id, &login, &fullname, &sex, &dateofbirth, &profilephoto)
 	if err != nil {
 		fmt.Printf("Unable to SELECT: %v\n", err)
@@ -97,7 +97,7 @@ func (user *UserRepository) GetUserPhoto(id int) (*string, error) {
 	var profilephoto string
 	err := user.db.conn.QueryRow(
 		context.Background(),
-		"SELECT PROFILE_PHOTO FROM USERS_INFO, USERS WHERE USERS.ID = $1 AND USERS_INFO.ID = USERS.ID",
+		"SELECT COALESCE(PROFILE_PHOTO, '') FROM USERS_INFO, USERS WHERE USERS.ID = $1 AND USERS_INFO.ID = USERS.ID",
 		id).Scan(&profilephoto)
 	if err != nil {
 		fmt.Printf("Unable to SELECT: %v\n", err)

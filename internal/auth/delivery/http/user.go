@@ -35,7 +35,7 @@ func (UserHandler *UserHandler) RegisterUser(groupname string, router *gin.Engin
 
 	authEndpoints := router.Group(groupname)
 	{
-		authEndpoints.GET("/sign-in", UserHandler.signIn)
+		authEndpoints.POST("/sign-in", UserHandler.signIn)
 		authEndpoints.POST("/sign-up", UserHandler.signUp)
 	}
 

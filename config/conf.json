@@ -8,7 +8,7 @@
 
     "jwt_token":{
         "signingkey": "key",
-        "expiredduration": 300000000000
+        "expiredduration": 30
     },
 
     "database": {

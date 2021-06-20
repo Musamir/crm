@@ -99,15 +99,10 @@ func (userHandler *UserHandler) SetUserInfo(c *gin.Context) {
 
 // GetUserInfo gets user information
 func (userHandler *UserHandler) GetUserInfo(c *gin.Context) {
-	var id int
 
-	id, err := strconv.Atoi(c.PostForm("id"))
-	if err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
+	id, _ := c.Get("user")
 
-	userInfo, err := userHandler.Impl.GetUserInfo(id)
+	userInfo, err := userHandler.Impl.GetUserInfo(id.(int))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -129,7 +124,10 @@ func (userHandler *UserHandler) GetUserProfilePhoto(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
 		})
+		c.Status(http.StatusBadRequest)
+		return
 	}
+
 	if *filename == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "empty profile",
