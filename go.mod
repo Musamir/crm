@@ -1,4 +1,4 @@
-module accounting
+module crm
 
 go 1.16
 

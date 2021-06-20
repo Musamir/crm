@@ -1,8 +1,8 @@
 package http
 
 import (
-	"accounting/internal/auth"
-	"accounting/internal/auth/models"
+	"crm/internal/auth"
+	"crm/internal/auth/models"
 	"fmt"
 	"net/http"
 
@@ -29,22 +29,21 @@ type signRequest struct {
 	Password string `json:"password"`
 }
 
-func (UserHandler *UserHandler) RegisterUser(groupname string, router *gin.Engine) {
+// RegisterUser registers sign-in, sign-up handlers and returns safeGroup routerGroup which checks token (ie use TokenCheckMiddleware)
+func (UserHandler *UserHandler) RegisterUser(groupname string, router *gin.Engine) *gin.RouterGroup {
 	// user Implementation
 
 	authEndpoints := router.Group(groupname)
 	{
-		authEndpoints.POST("/sign-in", UserHandler.signIn)
+		authEndpoints.GET("/sign-in", UserHandler.signIn)
 		authEndpoints.POST("/sign-up", UserHandler.signUp)
 	}
 
-	tokencheck := router.Group("safe")
+	safeGroup := router.Group("safe")
 	{
-		tokencheck.Use(NewAuthTokenCheckMiddleware(UserHandler.Impl))
-		tokencheck.GET("/test", func(c *gin.Context) {
-			c.JSON(200, "hello")
-		})
+		safeGroup.Use(NewAuthTokenCheckMiddleware(UserHandler.Impl))
 	}
+	return safeGroup
 }
 
 // signUp creates an account for the user
@@ -79,7 +78,7 @@ func (userHandler *UserHandler) signIn(c *gin.Context) {
 
 	fmt.Println("user=>", input)
 
-	token, err := userHandler.Impl.SignIn(toModelsUser(input))
+	id, token, err := userHandler.Impl.SignIn(toModelsUser(input))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -89,6 +88,7 @@ func (userHandler *UserHandler) signIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"id":    id,
 		"token": *token,
 	})
 }

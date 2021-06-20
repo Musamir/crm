@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"accounting/internal/auth/models"
 	"context"
+	"crm/internal/auth/models"
 	"errors"
 	"fmt"
 	"strings"
@@ -49,7 +49,7 @@ func (user *UserRepository) SingIn(request *models.User) (id int, err error) {
 	fmt.Println("(user *UserRepository) SingIn start")
 	pgUser := toPostgresUser(request)
 
-	err = user.db.conn.QueryRow(context.Background(), "select id from users where login=$1 and pass=$2", pgUser.Login, strings.TrimSpace(pgUser.Password)).Scan(&id)
+	err = user.db.conn.QueryRow(context.Background(), "SELECT ID FROM USERS WHERE LOGIN =$1 AND PASS=$2", pgUser.Login, strings.TrimSpace(pgUser.Password)).Scan(&id)
 	if err != nil {
 		fmt.Printf("QueryRow failed: %v\n", err)
 	}

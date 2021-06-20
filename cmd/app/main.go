@@ -1,7 +1,7 @@
 package main
 
 import (
-	"accounting/internal/app"
+	"crm/internal/app"
 	"fmt"
 )
 

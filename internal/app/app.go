@@ -1,12 +1,15 @@
 package app
 
 import (
-	authhttp "accounting/internal/auth/delivery/http"
-	authpostgres "accounting/internal/auth/repository/postgres"
-	authusecase "accounting/internal/auth/usecase"
-	"accounting/internal/config"
-	"accounting/pkg/auth/jwtImpl"
 	"context"
+	authHttp "crm/internal/auth/delivery/http"
+	authPostgres "crm/internal/auth/repository/postgres"
+	authUseCase "crm/internal/auth/usecase"
+	businessHttp "crm/internal/business/delivery/http"
+	businessPostgres "crm/internal/business/repository/postgres"
+	businessUseCase "crm/internal/business/usecase"
+	"crm/internal/config"
+	"crm/pkg/auth/jwtImpl"
 	"fmt"
 	"log"
 	"net/http"
@@ -37,15 +40,21 @@ func Run(confpath string) error {
 	dburl := fmt.Sprintf("%s://%s:%s@%s:%s/%s", conf.Database.DBMS, conf.Database.Username, conf.Database.Password, conf.Database.Host, conf.Database.Port, conf.Database.Dbname)
 	fmt.Println("db url = ", dburl)
 
-	dbRepo := authpostgres.NewDatabase(dburl)
+	dbAuthRepo := authPostgres.NewDatabase(dburl)
+	userAuthRepo := authPostgres.NewUserRepository(dbAuthRepo)
+	userAuthUseCase := authUseCase.NewAuthUseCase(userAuthRepo, jwtToken)
+	userAuthHandler := authHttp.NewUserHandler(userAuthUseCase)
+	safeGroup := userAuthHandler.RegisterUser("auth", rout)
 
-	userRepo := authpostgres.NewUserRepository(dbRepo)
+	dbBusinessRepo := businessPostgres.NewDatabase(dburl)
+	userRepo := businessPostgres.NewUserRepository(dbBusinessRepo)
+	UserUseCase := businessUseCase.NewUserUseCase(userRepo)
+	userHandler := businessHttp.NewUserHandler(UserUseCase)
+	userHandler.RegisterUser("business", safeGroup)
 
-	authUseCase := authusecase.NewAuthUseCase(userRepo, jwtToken)
-
-	userhandler := authhttp.NewUserHandler(authUseCase)
-
-	userhandler.RegisterUser("auth", rout)
+	safeGroup.GET("/test", func(c *gin.Context) {
+		c.JSON(200, "hello")
+	})
 
 	httpServer := &http.Server{
 		Addr:           conf.Http.Port,
@@ -66,8 +75,17 @@ func Run(confpath string) error {
 
 	<-quit
 
+	fmt.Println("Shutting down the Server ...")
 	ctx, shutdown := context.WithTimeout(context.Background(), 5*time.Second)
-	defer shutdown()
+
+	defer func() {
+		fmt.Println("The Server stopped .. Zzzz ..")
+		fmt.Println("closing auth db error =>", dbAuthRepo.Close())
+		fmt.Println("closing business db error => ", dbBusinessRepo.Close())
+		shutdown()
+	}()
+
+	fmt.Println("Server Exiting")
 
 	return httpServer.Shutdown(ctx)
 }

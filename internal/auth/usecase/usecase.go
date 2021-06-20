@@ -1,12 +1,12 @@
 package usecase
 
 import (
-	"accounting/internal/auth"
-	"accounting/internal/auth/models"
+	"crm/internal/auth"
+	"crm/internal/auth/models"
 	"crypto/sha1"
 	"fmt"
 
-	token "accounting/pkg/auth"
+	token "crm/pkg/auth"
 )
 
 // AuthUseCase ...
@@ -29,16 +29,17 @@ func (a *AuthUseCase) ParseToken(token *string) (int, error) {
 }
 
 // SignIn ...
-func (a *AuthUseCase) SignIn(user *models.User) (*string, error) {
+func (a *AuthUseCase) SignIn(user *models.User) (int, *string, error) {
 	fmt.Println("(a *AuthUseCase) SignIn start")
 	user.Password = *hash(&user.Password)
 	fmt.Println("user.Password = ", user.Password)
 	id, err := a.userRepo.SingIn(user)
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	fmt.Println("(a *AuthUseCase) SignIn end")
-	return a.jwtImpl.NewJWT(id)
+	token, err := a.jwtImpl.NewJWT(id)
+	return id, token, err
 }
 
 // SignUp ...
@@ -46,11 +47,7 @@ func (a *AuthUseCase) SignUp(user *models.User) error {
 
 	user.Password = *hash(&user.Password)
 
-	err := a.userRepo.SignUp(user)
-	if err != nil {
-		return err
-	}
-	return nil
+	return a.userRepo.SignUp(user)
 }
 
 func hash(pass *string) *string {

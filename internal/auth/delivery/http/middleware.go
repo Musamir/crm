@@ -1,7 +1,7 @@
 package http
 
 import (
-	"accounting/internal/auth"
+	"crm/internal/auth"
 	"errors"
 	"fmt"
 	"net/http"
@@ -58,7 +58,7 @@ func (m *AuthMiddleware) CheckToken(c *gin.Context) {
 	fmt.Println("header =>", headerParts)
 	id, err := m.usecase.ParseToken(&headerParts[1])
 	if err != nil {
-		fmt.Println("err1=>", err)
+		fmt.Println("err1 =>", err)
 		status := http.StatusInternalServerError
 		if err == ErrInvalidAccessToken {
 			status = http.StatusUnauthorized
@@ -67,5 +67,8 @@ func (m *AuthMiddleware) CheckToken(c *gin.Context) {
 		c.AbortWithStatus(status)
 		return
 	}
+	fmt.Println("middleware id = ", id)
 	c.Set("user", id)
+	st, a := c.Get("user")
+	fmt.Println("middleware getstring = ", st, a)
 }

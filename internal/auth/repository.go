@@ -1,6 +1,6 @@
 package auth
 
-import "accounting/internal/auth/models"
+import "crm/internal/auth/models"
 
 // UserRepository ...
 type UserRepository interface {

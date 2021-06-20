@@ -1,7 +1,7 @@
 package jwtImpl
 
 import (
-	"accounting/pkg/auth"
+	"crm/pkg/auth"
 	"errors"
 	"fmt"
 	"time"
@@ -36,6 +36,7 @@ func NewJWT(signingKey string, expireDuration int64) (*JWT, error) {
 // NewJWT ...
 func (t *JWT) NewJWT(Id int) (*string, error) {
 	fmt.Println("(t *JWT) NewJWT(Id int) start ")
+	defer fmt.Println("(t *JWT) NewJWT(Id int) end ")
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, AuthClaims{
 		ID: Id,
 		StandardClaims: jwt.StandardClaims{

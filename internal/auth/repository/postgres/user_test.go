@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"accounting/internal/auth/models"
+	"crm/internal/auth/models"
 	"fmt"
 )
 
