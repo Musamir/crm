@@ -55,7 +55,7 @@ func (userHandler *UserHandler) signUp(c *gin.Context) {
 	}
 	err := userHandler.Impl.SignUp(toModelsUser(input))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		c.Abort()
@@ -80,7 +80,7 @@ func (userHandler *UserHandler) signIn(c *gin.Context) {
 
 	id, token, err := userHandler.Impl.SignIn(toModelsUser(input))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		c.Abort()

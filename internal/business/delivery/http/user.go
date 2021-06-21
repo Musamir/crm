@@ -5,6 +5,7 @@ import (
 	"crm/internal/business/models"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -122,9 +123,10 @@ func (userHandler *UserHandler) GetUserProfilePhoto(c *gin.Context) {
 	filename, err := userHandler.Impl.GetUserPhoto(id.(int))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err,
+			"error": "empty profile",
 		})
-		c.Status(http.StatusBadRequest)
+		// c.Status(http.StatusBadRequest)
+		fmt.Println("error == :", err)
 		return
 	}
 
@@ -132,11 +134,20 @@ func (userHandler *UserHandler) GetUserProfilePhoto(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "empty profile",
 		})
-		c.Status(http.StatusBadRequest)
+		// c.Status(http.StatusBadRequest)
+		fmt.Println("error == : empty profile")
 		return
 	}
-
-	c.File("files/users_photo/" + *filename)
+	path := "files/users_photo/" + *filename
+	if _, err = os.Stat(path); os.IsNotExist(err) {
+		// path/to/whatever does not exist
+		fmt.Println("profile photo does not exist")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "empty profile",
+		})
+		return
+	}
+	c.File(path)
 	c.Status(http.StatusOK)
 }
 
