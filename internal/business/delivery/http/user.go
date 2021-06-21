@@ -69,7 +69,7 @@ func (userHandler *UserHandler) SetUserInfo(c *gin.Context) {
 	input.Login = c.PostForm("login")
 	input.FullName = c.PostForm("fullname")
 	input.Sex = c.PostForm("sex")
-	input.DateOfBirth = c.PostForm("dateofbirht")
+	input.DateOfBirth = c.PostForm("dateofbirth")
 	// single file
 	file, _ := c.FormFile("file")
 	fmt.Println("file.Filename = ", file.Filename)
