@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"crm/internal/auth"
 	"crm/internal/auth/models"
 	"errors"
 	"fmt"
@@ -9,6 +10,11 @@ import (
 )
 
 var errUserExist = errors.New("user already exists")
+
+const (
+	noRows             string = "no rows in result set"
+	somethingWentWrong string = "Something went wrong"
+)
 
 type user struct {
 	ID       int
@@ -44,17 +50,23 @@ func NewUserRepository(db *Database) *UserRepository {
 	}
 }
 
-// SingIn ...
-func (user *UserRepository) SingIn(request *models.User) (id int, err error) {
+// SingIn returns id if login & password are correct otherwise returns incorrectLogOrPass and errorMessage
+func (user *UserRepository) SingIn(request *models.User) (id int, status int) {
 	fmt.Println("(user *UserRepository) SingIn start")
+	defer fmt.Println("(user *UserRepository) SingIn end")
 	pgUser := toPostgresUser(request)
 
-	err = user.db.conn.QueryRow(context.Background(), "SELECT ID FROM USERS WHERE LOGIN =$1 AND PASS=$2", pgUser.Login, strings.TrimSpace(pgUser.Password)).Scan(&id)
+	status = auth.DbOk
+	err := user.db.conn.QueryRow(context.Background(), "SELECT ID FROM USERS WHERE LOGIN =$1 AND PASS=$2", pgUser.Login, strings.TrimSpace(pgUser.Password)).Scan(&id)
 	if err != nil {
+		status = auth.DbFailedQuery
+		if err.Error() == noRows {
+			status = auth.DbIncorrectLogOrPass
+		}
 		fmt.Printf("QueryRow failed: %v\n", err)
 	}
-	fmt.Println("(user *UserRepository) SingIn end")
-	return id, err
+
+	return
 }
 
 // SignUp ...

@@ -33,25 +33,31 @@ func NewJWT(signingKey string, expireDuration int64) (*JWT, error) {
 	}, nil
 }
 
-// NewJWT ...
-func (t *JWT) NewJWT(Id int) (*string, error) {
-	fmt.Println("JWT expire duration ==>", (time.Duration(t.expireDuration) * time.Minute).Minutes())
+// NewToken ...
+func (t *JWT) NewToken(Id int) (token *string, status int) {
 	fmt.Println("(t *JWT) NewJWT(Id int) start ")
 	defer fmt.Println("(t *JWT) NewJWT(Id int) end ")
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, AuthClaims{
+
+	tokenStr, err := jwt.NewWithClaims(jwt.SigningMethodHS256, AuthClaims{
 		ID: Id,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(time.Minute * time.Duration(t.expireDuration))).Unix(),
 		},
 	}).SignedString(t.signingKey)
-	fmt.Println("err new jwt token =>", err)
-	fmt.Println("(t *JWT) NewJWT(Id int) end token =>", token)
-	return &token, err
+	if err != nil {
+		fmt.Println("error new jwt token =>", err)
+		status = auth.FailedToCreateToken
+		return
+	}
 
+	fmt.Println("(t *JWT) NewJWT(Id int) end token =>", tokenStr)
+	token = &tokenStr
+	status = auth.Ok
+	return
 }
 
 // ParseToken ...
-func (a *JWT) ParseToken(accessToken *string) (int, error) {
+func (a *JWT) ParseToken(accessToken *string) (id int, status int) {
 	token, err := jwt.ParseWithClaims(*accessToken, &AuthClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -61,13 +67,17 @@ func (a *JWT) ParseToken(accessToken *string) (int, error) {
 
 	if err != nil {
 		fmt.Println("err parsing token =>", err)
+		status = auth.ParsingError
 	}
 
 	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {
-		return claims.ID, nil
+		id = claims.ID
+		status = auth.Ok
+		return
 	}
 	fmt.Println("error parsing ErrInvalidAccessToken")
-	return 0, auth.ErrInvalidAccessToken
+	status = auth.InvalidAccessToken
+	return
 }
 
 // func (m *JWT) NewRefreshToken() (string, error) {

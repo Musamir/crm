@@ -56,17 +56,15 @@ func (m *AuthMiddleware) CheckToken(c *gin.Context) {
 		return
 	}
 	fmt.Println("header =>", headerParts)
-	id, err := m.usecase.ParseToken(&headerParts[1])
-	if err != nil {
-		fmt.Println("id ===", id)
-
-		status := http.StatusUnauthorized
-
-		c.AbortWithStatus(status)
-		return
+	id, status := m.usecase.ParseToken(&headerParts[1])
+	if status == auth.ParsingError {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	} else if status == auth.InvalidAccessToken {
+		c.AbortWithStatus(http.StatusUnauthorized)
+	} else {
+		fmt.Println("middleware id = ", id)
+		c.Set("user", id)
+		st, a := c.Get("user")
+		fmt.Println("middleware getstring = ", st, a)
 	}
-	fmt.Println("middleware id = ", id)
-	c.Set("user", id)
-	st, a := c.Get("user")
-	fmt.Println("middleware getstring = ", st, a)
 }

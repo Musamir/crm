@@ -1,8 +1,12 @@
 package jwtImpl
 
-import "fmt"
+import (
+	"crm/pkg/auth"
+	"fmt"
+	"testing"
+)
 
-func ExampleJWT() {
+func TestJWT(t *testing.T) {
 	signingKey := "test"
 	var expireDuration int64 = 5
 
@@ -14,27 +18,20 @@ func ExampleJWT() {
 		fmt.Println("created")
 	}
 
-	token, err := JWT.NewJWT(5)
+	token, status := JWT.NewToken(5)
 
-	if err != nil {
-		fmt.Println(err.Error())
-	} else {
-		fmt.Println("token was created")
+	if status == auth.FailedToCreateToken {
+		t.Error("Error ", "couldn't create a token")
 	}
 
-	id, err := JWT.ParseToken(token)
+	id, status := JWT.ParseToken(token)
 
-	if err != nil {
-		fmt.Println(err.Error())
-	} else {
-		fmt.Println("no error occurred")
+	if status == auth.ParsingError {
+		t.Error("Error ", err.Error())
+	} else if status == auth.InvalidAccessToken {
+		t.Error("Error ", "invalid token")
 	}
-	fmt.Println("id =", id)
-
-	// Output:
-	// created
-	// token was created
-	// no error occurred
-	// id = 5
-
+	if id != 5 {
+		t.Error("expected id = 5, got", id)
+	}
 }

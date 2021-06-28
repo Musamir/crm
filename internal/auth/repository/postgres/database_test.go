@@ -6,7 +6,7 @@ import (
 )
 
 func ExampleDatabase() {
-	url := "postgres://postgres:sql@localhost:5432/Travel"
+	url := "postgres://postgres:sql@localhost:5432/commodity business"
 	db := NewDatabase(url)
 	ctx := context.Background()
 	db.conn.Ping(ctx)

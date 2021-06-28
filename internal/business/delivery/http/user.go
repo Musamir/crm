@@ -51,8 +51,23 @@ func (UserHandler *UserHandler) RegisterUser(groupname string, router *gin.Route
 			c.File("files/users_photo/01.jpg")
 		})
 		// userEndpoints.StaticFile("/01.jpg", "files/user_photo/01.jpg")
+		userEndpoints.GET("/test", test)
 	}
 
+}
+
+// @Summary test
+// @Security ApiKeyAuth
+// @Tags safe
+// @Description test is used to test your jwt token. It return "hello" if your token is suitable
+// @Produce  json
+// @Success 200 {string} message "hello"
+// @Failure 400 {string} error "error"
+// @Failure 401 {string} error "Unauthorized!!"
+// @Failure 500 {string} error "something went wrong"
+// @Router /safe/business/test [get]
+func test(c *gin.Context) {
+	c.JSON(200, "hello")
 }
 
 // SetUserInfo sets user information

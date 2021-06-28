@@ -6,17 +6,17 @@ import (
 	"crypto/sha1"
 	"fmt"
 
-	token "crm/pkg/auth"
+	authToken "crm/pkg/auth"
 )
 
 // AuthUseCase ...
 type AuthUseCase struct {
 	userRepo auth.UserRepository
-	jwtImpl  token.TokenUseCase
+	jwtImpl  authToken.TokenUseCase
 }
 
 // NewAuthUseCase ...
-func NewAuthUseCase(userRepo auth.UserRepository, jwt token.TokenUseCase) *AuthUseCase {
+func NewAuthUseCase(userRepo auth.UserRepository, jwt authToken.TokenUseCase) *AuthUseCase {
 	return &AuthUseCase{
 		userRepo: userRepo,
 		jwtImpl:  jwt,
@@ -24,22 +24,28 @@ func NewAuthUseCase(userRepo auth.UserRepository, jwt token.TokenUseCase) *AuthU
 }
 
 // ParseToken ...
-func (a *AuthUseCase) ParseToken(token *string) (int, error) {
+func (a *AuthUseCase) ParseToken(token *string) (int, int) {
 	return a.jwtImpl.ParseToken(token)
 }
 
 // SignIn ...
-func (a *AuthUseCase) SignIn(user *models.User) (int, *string, error) {
+func (a *AuthUseCase) SignIn(user *models.User) (id int, token *string, status int) {
 	fmt.Println("(a *AuthUseCase) SignIn start")
+	defer fmt.Println("(a *AuthUseCase) SignIn end")
 	user.Password = *hash(&user.Password)
 	fmt.Println("user.Password = ", user.Password)
-	id, err := a.userRepo.SingIn(user)
-	if err != nil {
-		return 0, nil, err
+	id, status = a.userRepo.SingIn(user)
+
+	if status != auth.DbOk {
+		status = auth.IncorrectLogOrPass
+		return
 	}
-	fmt.Println("(a *AuthUseCase) SignIn end")
-	token, err := a.jwtImpl.NewJWT(id)
-	return id, token, err
+
+	token, status = a.jwtImpl.NewToken(id)
+	if status != authToken.Ok {
+		status = auth.ServerError
+	}
+	return
 }
 
 // SignUp ...

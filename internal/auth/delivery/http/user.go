@@ -9,6 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	internalServerError string = "Oops something went wrong"
+	incorrectLogOrPass  string = "Incorrect login or password"
+)
+
 // Handler-used for data interaction over the http protocol
 type UserHandler struct {
 	// userImp - user repository implementation
@@ -68,6 +73,18 @@ func (userHandler *UserHandler) signUp(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
+var errr string = "errr"
+
+// @Summary signIn
+// @Tags auth
+// @Description signIn checks the users login and password and returns token if the user exists
+// @Accept  json
+// @Produce  json
+// @Param input body signRequest true "account info"
+// @Success 200 {object} signInResponse
+// @Failure 400 {string} errr
+// @Failure 500 {string} internalServerError
+// @Router /auth/sign-in [post]
 // signIn checks the users login and password and returns token if the user exists
 func (userHandler *UserHandler) signIn(c *gin.Context) {
 	input := new(signRequest)
@@ -78,19 +95,22 @@ func (userHandler *UserHandler) signIn(c *gin.Context) {
 
 	fmt.Println("user=>", input)
 
-	id, token, err := userHandler.Impl.SignIn(toModelsUser(input))
-	if err != nil {
+	id, token, status := userHandler.Impl.SignIn(toModelsUser(input))
+	if status == auth.IncorrectLogOrPass {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"error": incorrectLogOrPass,
 		})
-		c.Abort()
-		return
-	}
+	} else if status == auth.ServerError {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": internalServerError,
+		})
+	} else {
 
-	c.JSON(http.StatusOK, gin.H{
-		"id":    id,
-		"token": *token,
-	})
+		c.JSON(http.StatusOK, gin.H{
+			"id":    id,
+			"token": *token,
+		})
+	}
 }
 
 type signInResponse struct {
