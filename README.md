@@ -1,4 +1,4 @@
-<img src="https://i.ibb.co/Xxx0g1q/Welcome-poster-with-colorful-watercolor-brush-strokes-Vector-paper-illustration.jpg" alt="Welcome-poster-with-colorful-watercolor-brush-strokes-Vector-paper-illustration" border="0">
+<img src="https://i.ibb.co/gt9DBj0/welcome22.png" alt="welcome22" border="0">
 
 # CRM - Customer relationship management
 
