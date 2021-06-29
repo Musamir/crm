@@ -68,22 +68,14 @@ func (user *UserRepository) GetUserInfo(id int) (*models.UsersInfo, error) {
 
 	var userInfo models.UsersInfo
 
-	var login, fullname, sex, dateofbirth, profilephoto string
-
 	err := user.db.conn.QueryRow(
 		context.Background(),
-		"SELECT USERS_INFO.ID, USERS.LOGIN, FULLNAME, SEX.NAME, to_char(DATE_OF_BIRTH, 'YYYY.DD.MM'), COALESCE(PROFILE_PHOTO, '') FROM USERS_INFO, USERS, SEX WHERE USERS.ID = $1 AND USERS_INFO.ID = USERS.ID AND SEX.ID = SEX  ORDER BY FULLNAME",
-		id).Scan(&id, &login, &fullname, &sex, &dateofbirth, &profilephoto)
+		"SELECT USERS_INFO.ID, USERS.LOGIN, USERS_INFO.FULLNAME, SEX.NAME, to_char(USERS_INFO.DATE_OF_BIRTH, 'YYYY.DD.MM'), COALESCE(USERS_INFO.PROFILE_PHOTO, '') FROM USERS_INFO, USERS, SEX WHERE USERS.ID = $1 AND USERS_INFO.ID = USERS.ID AND SEX.ID = USERS_INFO.SEX",
+		id).Scan(&userInfo.ID, &userInfo.Login, &userInfo.FullName, &userInfo.Sex, &userInfo.DateOfBirth, &userInfo.ProfilePhoto)
 	if err != nil {
 		fmt.Printf("Unable to SELECT: %v\n", err)
 		return nil, err
 	}
-
-	userInfo.ID = id
-	userInfo.Login = login
-	userInfo.Sex = sex
-	userInfo.DateOfBirth = dateofbirth
-	userInfo.ProfilePhoto = profilephoto
 
 	fmt.Println("userInfo ===>", userInfo)
 

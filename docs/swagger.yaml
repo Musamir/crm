@@ -2,14 +2,42 @@ basePath: /
 definitions:
   http.signInResponse:
     properties:
+      id:
+        description: Id - user id
+        type: integer
       token:
+        description: token - generated new token for the user
         type: string
     type: object
   http.signRequest:
     properties:
       login:
+        description: login - user login (required, not null)
         type: string
       password:
+        description: password - user password (required, not null)
+        type: string
+    type: object
+  http.userInfo:
+    properties:
+      changeProfilePhoto:
+        description: changeProfilePhoto = {"yes" - change, "no" - pass}
+        type: string
+      dateOfBirth:
+        description: dateOfBirth - user date of birth
+        type: string
+      fullName:
+        description: fullName - user fullName
+        type: string
+      login:
+        description: login - user login
+        type: string
+      profilephoto:
+        description: profilephoto - user profile photo file. If you don't want to
+          change profile photo send current profilephoto filename
+        type: string
+      sex:
+        description: sex - user sex
         type: string
     type: object
 host: localhost:8085
@@ -40,16 +68,110 @@ paths:
           schema:
             $ref: '#/definitions/http.signInResponse'
         "400":
-          description: Bad Request
+          description: Incorrect login or password
+          schema:
+            type: string
+        "401":
+          description: Unauthorized!!
           schema:
             type: string
         "500":
-          description: Internal Server Error
+          description: Oops something went wrong(( Sorry, please try again later
           schema:
             type: string
       summary: signIn
       tags:
       - auth
+  /safe/business/getUserInfo:
+    get:
+      description: GetUserInfo gets user information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: the user information was set
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized!!
+          schema:
+            type: string
+        "500":
+          description: Oops something went wrong
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: GetUserInfo
+      tags:
+      - safe
+  /safe/business/getUserProfilePhoto:
+    get:
+      description: GetUserProfilePhoto gets user profile photo
+      produces:
+      - multipart/form-data
+      responses:
+        "200":
+          description: file
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized!!
+          schema:
+            type: string
+        "500":
+          description: Oops something went wrong
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: GetUserProfilePhoto
+      tags:
+      - safe
+  /safe/business/setUserInfo:
+    put:
+      consumes:
+      - multipart/form-data
+      description: SetUserInfo sets user information
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.userInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: the user information was set
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized!!
+          schema:
+            type: string
+        "500":
+          description: Oops something went wrong
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: SetUserInfo
+      tags:
+      - safe
   /safe/business/test:
     get:
       description: test is used to test your jwt token. It return "hello" if your

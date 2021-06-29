@@ -30,7 +30,9 @@ func NewUserHandler(Impl auth.AuthUseCase) *UserHandler {
 
 // signRequest - structure that is sent to sign-in/up url
 type signRequest struct {
-	Login    string `json:"login"`
+	// login - user login (required, not null)
+	Login string `json:"login"`
+	// password - user password (required, not null)
 	Password string `json:"password"`
 }
 
@@ -73,8 +75,6 @@ func (userHandler *UserHandler) signUp(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-var errr string = "errr"
-
 // @Summary signIn
 // @Tags auth
 // @Description signIn checks the users login and password and returns token if the user exists
@@ -82,8 +82,9 @@ var errr string = "errr"
 // @Produce  json
 // @Param input body signRequest true "account info"
 // @Success 200 {object} signInResponse
-// @Failure 400 {string} errr
-// @Failure 500 {string} internalServerError
+// @Failure 400 {string} error "Incorrect login or password"
+// @Failure 401 {string} error "Unauthorized!!"
+// @Failure 500 {string} error "Oops something went wrong(( Sorry, please try again later"
 // @Router /auth/sign-in [post]
 // signIn checks the users login and password and returns token if the user exists
 func (userHandler *UserHandler) signIn(c *gin.Context) {
@@ -106,15 +107,16 @@ func (userHandler *UserHandler) signIn(c *gin.Context) {
 		})
 	} else {
 
-		c.JSON(http.StatusOK, gin.H{
-			"id":    id,
-			"token": *token,
+		c.JSON(http.StatusOK, signInResponse{
+			Id:    id,
+			Token: *token,
 		})
 	}
 }
 
 type signInResponse struct {
-	Token string `json:"token"`
+	Id    int    `json:"id"`    // Id - user id
+	Token string `json:"token"` // token - generated new token for the user
 }
 
 func toSignInput(u *models.User) *signRequest {

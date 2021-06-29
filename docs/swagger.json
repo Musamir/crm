@@ -41,13 +41,162 @@
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Incorrect login or password",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized!!",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Oops something went wrong(( Sorry, please try again later",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/safe/business/getUserInfo": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "GetUserInfo gets user information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "safe"
+                ],
+                "summary": "GetUserInfo",
+                "responses": {
+                    "200": {
+                        "description": "the user information was set",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Oops something went wrong",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/safe/business/getUserProfilePhoto": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "GetUserProfilePhoto gets user profile photo",
+                "produces": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "safe"
+                ],
+                "summary": "GetUserProfilePhoto",
+                "responses": {
+                    "200": {
+                        "description": "file",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Oops something went wrong",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/safe/business/setUserInfo": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "SetUserInfo sets user information",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "safe"
+                ],
+                "summary": "SetUserInfo",
+                "parameters": [
+                    {
+                        "description": "account info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.userInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "the user information was set",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Oops something went wrong",
                         "schema": {
                             "type": "string"
                         }
@@ -103,7 +252,12 @@
         "http.signInResponse": {
             "type": "object",
             "properties": {
+                "id": {
+                    "description": "Id - user id",
+                    "type": "integer"
+                },
                 "token": {
+                    "description": "token - generated new token for the user",
                     "type": "string"
                 }
             }
@@ -112,9 +266,40 @@
             "type": "object",
             "properties": {
                 "login": {
+                    "description": "login - user login (required, not null)",
                     "type": "string"
                 },
                 "password": {
+                    "description": "password - user password (required, not null)",
+                    "type": "string"
+                }
+            }
+        },
+        "http.userInfo": {
+            "type": "object",
+            "properties": {
+                "changeProfilePhoto": {
+                    "description": "changeProfilePhoto = {\"yes\" - change, \"no\" - pass}",
+                    "type": "string"
+                },
+                "dateOfBirth": {
+                    "description": "dateOfBirth - user date of birth",
+                    "type": "string"
+                },
+                "fullName": {
+                    "description": "fullName - user fullName",
+                    "type": "string"
+                },
+                "login": {
+                    "description": "login - user login",
+                    "type": "string"
+                },
+                "profilephoto": {
+                    "description": "profilephoto - user profile photo file. If you don't want to change profile photo send current profilephoto filename",
+                    "type": "string"
+                },
+                "sex": {
+                    "description": "sex - user sex",
                     "type": "string"
                 }
             }
