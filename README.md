@@ -1,6 +1,6 @@
-# CRM - Customer relationship management
-
 <img src="https://i.ibb.co/Xxx0g1q/Welcome-poster-with-colorful-watercolor-brush-strokes-Vector-paper-illustration.jpg" alt="Welcome-poster-with-colorful-watercolor-brush-strokes-Vector-paper-illustration" border="0">
+
+# CRM - Customer relationship management
 
 This is a simple version of a CRM system by Musamir.
 
