@@ -25,5 +25,5 @@ $ go run cmd/app/main.go
 ```
 
 ## Swagger
-Run your app, and browse to [http://localhost:8085/swagger/index.html](http://localhost:8085/swagger/index.html). You will see Swagger 2.0 Api documents as shown below:
+Run the programm, and browse to [http://localhost:8085/swagger/index.html](http://localhost:8085/swagger/index.html). You will see Swagger 2.0 Api documents as shown below:
 ![swagger](https://user-images.githubusercontent.com/43841786/123855799-bc460200-d939-11eb-97b3-f770e23d3ae3.png)
