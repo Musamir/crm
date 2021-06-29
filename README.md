@@ -2,6 +2,7 @@
 <p align="center" width="100%">
     <img src="https://i.ibb.co/bvRLXnz/welcome-PNG32.png" alt="welcome-PNG32" border="0">
 </p>
+
 # CRM - Customer relationship management
 
 This is a simple version of a CRM system by Musamir.
