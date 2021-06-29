@@ -1,4 +1,4 @@
-<center><img align="center" src="https://i.ibb.co/bvRLXnz/welcome-PNG32.png" alt="welcome-PNG32" border="0"></center>
+<div style="text-align:center"><img align="center" src="https://i.ibb.co/bvRLXnz/welcome-PNG32.png" alt="welcome-PNG32" border="0"></div>
 
 # CRM - Customer relationship management
 
