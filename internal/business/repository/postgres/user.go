@@ -40,7 +40,7 @@ func NewUserRepository(db *Database) *UserRepository {
 	}
 }
 
-// SetUserInfo sets user information
+// SetUserInfo sets the user information
 func (user *UserRepository) SetUserInfo(request *models.UsersInfo) error {
 	fmt.Println("(user *UserRepository) SetUserInfo start")
 	defer fmt.Println("(user *UserRepository) SetUserInfo end")
@@ -61,7 +61,7 @@ func (user *UserRepository) SetUserInfo(request *models.UsersInfo) error {
 	return err
 }
 
-//GetUserInfo get user information
+//GetUserInfo gets the user information
 func (user *UserRepository) GetUserInfo(id int) (*models.UsersInfo, error) {
 	fmt.Println(" (user *UserRepository) GetUserInfo start")
 	defer fmt.Println(" (user *UserRepository) GetUserInfo end")
@@ -82,7 +82,7 @@ func (user *UserRepository) GetUserInfo(id int) (*models.UsersInfo, error) {
 	return &userInfo, nil
 }
 
-//GetUserPhoto get user profile photo
+//GetUserPhoto gets the user profile photo
 func (user *UserRepository) GetUserPhoto(id int) (*string, error) {
 	fmt.Println(" (user *UserRepository) GetUserPhoto start")
 	defer fmt.Println(" (user *UserRepository) GetUserPhoto end")
@@ -99,4 +99,37 @@ func (user *UserRepository) GetUserPhoto(id int) (*string, error) {
 	fmt.Println("profilephoto ===>", profilephoto)
 
 	return &profilephoto, nil
+}
+
+//GetSexList gets sex list
+func (user *UserRepository) GetSexList() (*[]string, error) {
+	fmt.Println(" (user *UserRepository) GetSexList start")
+	defer fmt.Println("(user *UserRepository) GetSexList() end")
+
+	// Execute the query
+	rows, err := user.db.conn.Query(context.Background(), "SELECT NAME FROM SEX ORDER BY NAME")
+	// carefully deferring Queries closing
+	defer rows.Close()
+
+	if err != nil {
+		fmt.Println("Unable to select due to: ", err)
+		return nil, err
+	}
+
+	// Using tmp variable for reading
+	var sexList []string
+
+	// Next prepares the next row for reading.
+	for rows.Next() {
+		// Scan reads the values from the current row into tmp
+		var sex string
+		rows.Scan(&sex)
+		sexList = append(sexList, sex)
+	}
+	if err := rows.Err(); err != nil {
+		// if any error occurred while reading rows.
+		fmt.Println("Error occurred while reading rows: ", err)
+		return nil, err
+	}
+	return &sexList, nil
 }

@@ -41,3 +41,10 @@ func (a *UserUseCase) GetUserPhoto(id int) (*string, error) {
 
 	return a.userRepo.GetUserPhoto(id)
 }
+
+//GetSexList gets sex list
+func (a *UserUseCase) GetSexList() (*[]string, error) {
+	fmt.Println("(a *UserUseCase) GetSexList()  start")
+	defer fmt.Println("(a *UserUseCase) GetSexList()  end")
+	return a.userRepo.GetSexList()
+}

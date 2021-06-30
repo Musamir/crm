@@ -82,6 +82,35 @@ paths:
       summary: signIn
       tags:
       - auth
+  /safe/business/getSexList:
+    get:
+      description: GetSexList gets sex list
+      produces:
+      - multipart/form-data
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized!!
+          schema:
+            type: string
+        "500":
+          description: Oops something went wrong
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: GetSexList
+      tags:
+      - safe
   /safe/business/getUserInfo:
     get:
       description: GetUserInfo gets user information

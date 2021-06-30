@@ -50,10 +50,10 @@ func (UserHandler *UserHandler) RegisterUser(groupname string, router *gin.Route
 		userEndpoints.GET("/female.jpg", func(c *gin.Context) {
 			c.File("files/users_photo/01.jpg")
 		})
-		// userEndpoints.StaticFile("/01.jpg", "files/user_photo/01.jpg")
+		userEndpoints.GET("/getSexList", UserHandler.GetSexList)
+
 		userEndpoints.GET("/test", test)
 	}
-
 }
 
 const (
@@ -178,21 +178,13 @@ func (userHandler *UserHandler) GetUserProfilePhoto(c *gin.Context) {
 	}
 
 	filename, err := userHandler.Impl.GetUserPhoto(id)
-	if err != nil {
+	if err != nil || *filename == "" {
 		c.JSON(http.StatusBadRequest, "empty profile")
-		// c.Status(http.StatusBadRequest)
-		fmt.Println("error == :", err)
-		c.Abort()
-		return
-	}
-
-	if *filename == "" {
-		c.JSON(http.StatusBadRequest, "empty profile")
-		// c.Status(http.StatusBadRequest)
 		fmt.Println("error == : empty profile")
 		c.Abort()
 		return
 	}
+
 	path := "files/users_photo/" + *filename
 	if _, err = os.Stat(path); os.IsNotExist(err) {
 		// path/to/whatever does not exist
@@ -203,6 +195,29 @@ func (userHandler *UserHandler) GetUserProfilePhoto(c *gin.Context) {
 	}
 	c.File(path)
 	c.Status(http.StatusOK)
+}
+
+// @Summary GetSexList
+// @Security ApiKeyAuth
+// @Tags safe
+// @Description GetSexList gets sex list
+// @Produce mpfd
+// @Success 200 {object} []string
+// @Failure 400 {string} error "Bad Request"
+// @Failure 401 {string} error "Unauthorized!!"
+// @Failure 500 {string} error "Oops something went wrong"
+// @Router /safe/business/getSexList [get]
+// GetSexList gets sex list
+func (userHandler *UserHandler) GetSexList(c *gin.Context) {
+
+	sexList, err := userHandler.Impl.GetSexList()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		c.Abort()
+		return
+	}
+
+	c.JSON(http.StatusOK, *sexList)
 }
 
 func toSetUserInfo(u *models.UsersInfo) *userInfo {
@@ -220,6 +235,12 @@ func toModelsUser(u *userInfo, id int) *models.UsersInfo {
 	}
 }
 
+func geId(c *gin.Context) (id int, exist bool) {
+	idstr, exist := c.Get("user")
+	id = idstr.(int)
+	return
+}
+
 // @Summary test
 // @Security ApiKeyAuth
 // @Tags safe
@@ -232,10 +253,4 @@ func toModelsUser(u *userInfo, id int) *models.UsersInfo {
 // @Router /safe/business/test [get]
 func test(c *gin.Context) {
 	c.JSON(200, "hello")
-}
-
-func geId(c *gin.Context) (id int, exist bool) {
-	idstr, exist := c.Get("user")
-	id = idstr.(int)
-	return
 }

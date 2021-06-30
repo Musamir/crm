@@ -76,6 +76,52 @@ var doc = `{
                 }
             }
         },
+        "/safe/business/getSexList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "GetSexList gets sex list",
+                "produces": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "safe"
+                ],
+                "summary": "GetSexList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Oops something went wrong",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/safe/business/getUserInfo": {
             "get": {
                 "security": [
