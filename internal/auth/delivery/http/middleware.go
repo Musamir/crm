@@ -63,8 +63,8 @@ func (m *AuthMiddleware) CheckToken(c *gin.Context) {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	} else {
 		fmt.Println("middleware id = ", id)
-		c.Set("user", id)
-		st, a := c.Get("user")
+		c.Set("user_id", id)
+		st, a := c.Get("user_id")
 		fmt.Println("middleware getstring = ", st, a)
 	}
 }

@@ -7,6 +7,7 @@ type AuthUseCase interface {
 	SignIn(user *models.User) (id int, token *string, status int)
 	SignUp(user *models.User) (err error)
 	ParseToken(token *string) (id int, status int)
+	ChangePassword(id int, oldPassword string, newPassword string) (status int)
 }
 
 const (
@@ -22,4 +23,6 @@ const (
 	FailedToCreateToken = 4 // couldn't create a token
 	//ServerError
 	ServerError = 5 // Something went wrong
+	//IncorrectPassword
+	IncorrectPassword = 6
 )

@@ -76,6 +76,63 @@ var doc = `{
                 }
             }
         },
+        "/safe/auth/changePassword": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "ChangePassword changed user password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "safe"
+                ],
+                "summary": "ChangePassword",
+                "parameters": [
+                    {
+                        "description": "change pass struct",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.changePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "incorrectPassword or the id doesn't exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized!!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Oops something went wrong",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/safe/business/getSexList": {
             "get": {
                 "security": [
@@ -310,6 +367,17 @@ var doc = `{
         }
     },
     "definitions": {
+        "http.changePasswordRequest": {
+            "type": "object",
+            "properties": {
+                "newpassword": {
+                    "type": "string"
+                },
+                "oldpassword": {
+                    "type": "string"
+                }
+            }
+        },
         "http.signInResponse": {
             "type": "object",
             "properties": {

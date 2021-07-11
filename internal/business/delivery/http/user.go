@@ -236,8 +236,11 @@ func toModelsUser(u *userInfo, id int) *models.UsersInfo {
 }
 
 func geId(c *gin.Context) (id int, exist bool) {
-	idstr, exist := c.Get("user")
-	id = idstr.(int)
+	idstr, exist := c.Get("user_id")
+	id = 0
+	if exist {
+		id = idstr.(int)
+	}
 	return
 }
 

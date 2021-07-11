@@ -8,4 +8,5 @@ type UserUseCase interface {
 	GetUserInfo(id int) (*models.UsersInfo, error)
 	GetUserPhoto(id int) (*string, error)
 	GetSexList() (*[]string, error)
+	// ChangePassword(newPassword string, oldPassword string) error
 }

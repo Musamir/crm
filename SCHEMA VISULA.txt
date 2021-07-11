@@ -51,7 +51,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="230" y="18" name="USERS_INFO">
+<table x="220" y="16" name="USERS_INFO">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="USERS" row="id" />
@@ -67,6 +67,9 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="PROFILE PHOTO" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="EMAIL" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
@@ -101,7 +104,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="188" y="603" name="BUSINESS_OWNERS">
+<table x="183" y="624" name="BUSINESS_OWNERS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -329,7 +332,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="228" y="174" name="DELIVERIES">
+<table x="212" y="198" name="DELIVERIES">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -355,7 +358,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="220" y="363" name="OWNER_LIST">
+<table x="218" y="384" name="OWNER_LIST">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -479,7 +482,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="192" y="488" name="BUSINESS STATUS">
+<table x="197" y="526" name="BUSINESS STATUS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -490,7 +493,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="405" y="206" name="DELIVERY STATUS">
+<table x="412" y="233" name="DELIVERY STATUS">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>

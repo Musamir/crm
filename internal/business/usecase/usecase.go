@@ -48,3 +48,9 @@ func (a *UserUseCase) GetSexList() (*[]string, error) {
 	defer fmt.Println("(a *UserUseCase) GetSexList()  end")
 	return a.userRepo.GetSexList()
 }
+
+// ChangePassword ...
+func (a *UserUseCase) ChangePassword(newPassword string, oldPassword string) error {
+	
+	return nil
+}

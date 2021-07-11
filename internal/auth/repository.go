@@ -6,6 +6,7 @@ import "crm/internal/auth/models"
 type UserRepository interface {
 	SingIn(request *models.User) (id int, status int)
 	SignUp(request *models.User) (err error)
+	ChangePassword(id int, oldPassword string, newPassword string) (status int)
 }
 
 const (

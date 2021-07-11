@@ -1,1 +1,1 @@
-web: bin/cmd/app
+web: crm/cmd/app

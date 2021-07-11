@@ -6,9 +6,10 @@ import (
 
 func TestUserRepository(t *testing.T) {
 	url := "postgres://postgres:sql@localhost:5432/commodity business"
+
 	db := NewDatabase(url)
 	defer db.Close()
-	
+
 	userRepo := NewUserRepository(db)
 
 	sexList, err := userRepo.GetSexList()

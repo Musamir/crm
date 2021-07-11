@@ -88,3 +88,24 @@ func (user *UserRepository) SignUp(request *models.User) (err error) {
 	}
 	return
 }
+
+// ChangePassword changes user password
+func (u *UserRepository) ChangePassword(id int, oldPassword string, newPassword string) (status int) {
+	fmt.Println("(u *UserRepository) ChangePassword(id int, oldPassword string, newPassword string) start")
+	defer fmt.Println("(u *UserRepository) ChangePassword(id int, oldPassword string, newPassword string) end")
+
+	fmt.Println("oldpass :=", oldPassword)
+	fmt.Println("newpass :=", newPassword)
+	result, err := u.db.conn.Exec(context.Background(), "UPDATE USERS SET PASS=$1 WHERE ID = $2 AND PASS = $3", strings.TrimSpace(newPassword), id, strings.TrimSpace(oldPassword))
+
+	if err != nil {
+		status = auth.DbFailedQuery
+		fmt.Printf("Exec failed: %v\n", err)
+	} else if numberOfRowsAffected := result.RowsAffected(); numberOfRowsAffected == int64(0) {
+		fmt.Println("result rows affected =>", numberOfRowsAffected)
+		status = auth.DbIncorrectLogOrPass
+	} else {
+		status = auth.DbOk
+	}
+	return
+}

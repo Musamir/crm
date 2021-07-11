@@ -42,6 +42,8 @@ func Run(confpath string) error {
 	}
 	// urlExample := "postgres://username:password@localhost:5432/database_name"
 	dburl := fmt.Sprintf("%s://%s:%s@%s:%s/%s", conf.Database.DBMS, conf.Database.Username, conf.Database.Password, conf.Database.Host, conf.Database.Port, conf.Database.Dbname)
+
+	// dburl = "postgres://yohcfmeaqpopmw:9346f651a3e7223b874528ff8f5be59cb37d47b6a1318587b8d628ca669d27c5@ec2-54-91-188-254.compute-1.amazonaws.com:5432/d5hgt0nv8vkl5g"
 	fmt.Println("db url = ", dburl)
 
 	dbAuthRepo := authPostgres.NewDatabase(dburl)

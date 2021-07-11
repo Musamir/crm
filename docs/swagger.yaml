@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  http.changePasswordRequest:
+    properties:
+      newpassword:
+        type: string
+      oldpassword:
+        type: string
+    type: object
   http.signInResponse:
     properties:
       id:
@@ -82,6 +89,42 @@ paths:
       summary: signIn
       tags:
       - auth
+  /safe/auth/changePassword:
+    put:
+      consumes:
+      - application/json
+      description: ChangePassword changed user password
+      parameters:
+      - description: change pass struct
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/http.changePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: incorrectPassword or the id doesn't exist
+          schema:
+            type: string
+        "401":
+          description: Unauthorized!!
+          schema:
+            type: string
+        "500":
+          description: Oops something went wrong
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: ChangePassword
+      tags:
+      - safe
   /safe/business/getSexList:
     get:
       description: GetSexList gets sex list

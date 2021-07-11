@@ -12,6 +12,8 @@ import (
 const (
 	internalServerError string = "Oops something went wrong"
 	incorrectLogOrPass  string = "Incorrect login or password"
+	incorrectPass       string = "incorrectPassword"
+	success             string = "success"
 )
 
 // Handler-used for data interaction over the http protocol
@@ -49,6 +51,7 @@ func (UserHandler *UserHandler) RegisterUser(groupname string, router *gin.Engin
 	safeGroup := router.Group("safe")
 	{
 		safeGroup.Use(NewAuthTokenCheckMiddleware(UserHandler.Impl))
+		safeGroup.PUT("/"+groupname+"/changePassword", UserHandler.ChangePassword)
 	}
 	return safeGroup
 }
@@ -114,6 +117,59 @@ func (userHandler *UserHandler) signIn(c *gin.Context) {
 	}
 }
 
+// changePasswordRequest stuct for password change
+type changePasswordRequest struct {
+	OldPassword string `json:"oldpassword"`
+	NewPassword string `json:"newpassword"`
+}
+
+// @Summary ChangePassword
+// @Security ApiKeyAuth
+// @Tags safe
+// @Description ChangePassword changed user password
+// @Param input body changePasswordRequest true "change pass struct"
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} status "success"
+// @Failure 400 {string} error "incorrectPassword or the id doesn't exist"
+// @Failure 401 {string} error "Unauthorized!!"
+// @Failure 500 {string} error "Oops something went wrong"
+// @Router /safe/auth/changePassword [put]
+// ChangePassword changed user password
+func (userHandler *UserHandler) ChangePassword(c *gin.Context) {
+	id, exist := geId(c)
+	if !exist {
+		c.JSON(http.StatusBadRequest, "the id doesn't exist")
+		c.Abort()
+		return
+	}
+	fmt.Println("id ==", id)
+	input := new(changePasswordRequest)
+
+	if err := c.BindJSON(input); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("input ==>", input)
+
+	if input.NewPassword == "" {
+		c.JSON(http.StatusBadRequest, incorrectPass)
+		c.Abort()
+		return
+	}
+
+	status := userHandler.Impl.ChangePassword(id, input.OldPassword, input.NewPassword)
+	fmt.Println("result status ==>", status)
+	if status == auth.IncorrectPassword {
+		c.JSON(http.StatusBadRequest, incorrectPass)
+	} else if status != auth.Ok {
+		c.JSON(http.StatusInternalServerError, internalServerError)
+	} else {
+		c.JSON(http.StatusOK, success)
+	}
+}
+
 type signInResponse struct {
 	Id    int    `json:"id"`    // Id - user id
 	Token string `json:"token"` // token - generated new token for the user
@@ -131,4 +187,13 @@ func toModelsUser(u *signRequest) *models.User {
 		Login:    u.Login,
 		Password: u.Password,
 	}
+}
+
+func geId(c *gin.Context) (id int, exist bool) {
+	idstr, exist := c.Get("user_id")
+	id = 0
+	if exist {
+		id = idstr.(int)
+	}
+	return
 }
